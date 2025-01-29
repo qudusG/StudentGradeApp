@@ -13,6 +13,14 @@ namespace StudentGrades
 
             builder.Services.AddAuthorization();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    policy => policy.AllowAnyOrigin()
+                                    .AllowAnyMethod() 
+                                    .AllowAnyHeader()); 
+            });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -22,7 +30,7 @@ namespace StudentGrades
 
             var app = builder.Build();
             SeedData(app.Services);
-
+            app.UseCors("AllowAnyOrigin");
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
